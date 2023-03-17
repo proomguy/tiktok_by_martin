@@ -11,14 +11,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text(
-            "Log in screen seen",
-          style: TextStyle(
-            color: Colors.white
-          ),
-        ),
-      ),
+      body: SingleChildScrollView(),
     );
   }
 }
