@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165529594070",
+    "project_id": "tiktok-app-d694e",
+    "storage_bucket": "tiktok-app-d694e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165529594070:android:6d2e7ca06493455e2a4177",
+        "android_client_info": {
+          "package_name": "com.jisevemartin.tiktok_remake"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165529594070-9o5c023cakui7vo7vl94aabtdu7hiopg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCheJEQb2eDFh25Hqx_GzR4ZkRw54cWS64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165529594070-9o5c023cakui7vo7vl94aabtdu7hiopg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
