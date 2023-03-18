@@ -5,6 +5,7 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:tiktok_remake/authentication/login_screen.dart';
 
 import '../widgets/input_text_widget.dart';
+import 'authentication_controller.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController userNameTextEditingController = TextEditingController();
 
   bool showProgressBar = false;
+
+  var authenticationController = AuthenticationController.instanceAuth;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               GestureDetector(
                 onTap: (){
                   //Allow users to choose images from gallery function
+                  authenticationController.chooseImageFromGallery();
+
+                  //To pick images by the camera
+                  //authenticationController.captureImageWithCamera();
                 },
                 child: const CircleAvatar(
                   radius: 80,
