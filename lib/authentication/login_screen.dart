@@ -5,6 +5,9 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:tiktok_remake/authentication/registration_screen.dart';
 import 'package:tiktok_remake/widgets/input_text_widget.dart';
 
+import '../global_variables.dart';
+import 'authentication_controller.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -16,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+  var authenticationController = AuthenticationController.instanceAuth;
 
-  bool showProgressBar = false;
 
 
   @override
@@ -93,11 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: InkWell(
                       onTap: (){
-                        setState(() {
-                          showProgressBar = true;
-                        });
-
                         //We will display the animation here and allow the user to log in
+                        if(emailTextEditingController.text.isNotEmpty && passwordTextEditingController.text.isNotEmpty){
+                          setState(() {
+                            showProgressBar = true;
+                          });
+                          authenticationController.loginUserNow(
+                            emailTextEditingController.text.trim(),
+                            passwordTextEditingController.text,
+                          );
+                        }
 
                       },
                       child: const Center(

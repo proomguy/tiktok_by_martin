@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_remake/authentication/login_screen.dart';
+import 'package:tiktok_remake/authentication/registration_screen.dart';
 import 'package:tiktok_remake/global_variables.dart';
 import 'user.dart' as userModel;
 
@@ -86,6 +87,30 @@ class AuthenticationController extends GetxController{
     TaskSnapshot taskSnapshot = await uploadTask;
     String downloadUrlOfUploadedImage = await taskSnapshot.ref.getDownloadURL();
     return downloadUrlOfUploadedImage;
+
+  }
+
+  void loginUserNow(String userEmail, String userPassword) async{
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: userEmail,
+          password: userPassword,
+      );
+      Get.snackbar(
+          "Logged in Successful", "You are now logged successfully"
+      );
+      showProgressBar = false;
+      //For purpose of testing the app, for now
+      Get.to(const RegistrationScreen());
+    }
+    catch(error){
+      Get.snackbar(
+          "Login Unsuccessful", "Error Occurred during Authentication"
+      );
+      showProgressBar = false;
+      Get.to(const LoginScreen());
+
+    }
 
   }
 
