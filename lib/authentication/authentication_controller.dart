@@ -1,7 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tiktok_remake/authentication/login_screen.dart';
+import 'package:tiktok_remake/global_variables.dart';
+import 'user.dart' as userModel;
 
 class AuthenticationController extends GetxController{
 
@@ -33,6 +39,53 @@ class AuthenticationController extends GetxController{
       );
     }
     _pickedFile = Rx<File?>(File(pickedImageFile!.path));
+
+  }
+
+  void createAccountForNewUser(File imageFile, String userName, String userEmail, String userPassword) async{
+    try{
+      //Create user in the Firebase authentication
+      UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: userEmail,
+        password: userPassword,
+      );
+
+      //Step 2 Save the user image in the firebase storage
+      String imageDownloadUrl = await uploadImageToStorage(imageFile);
+
+      //step 3 we get the download Url fro the firebase storage
+
+      //step 4 save user data to the firestore database
+      userModel.User user = userModel.User(
+        name: userName,
+        email: userEmail,
+        image: imageDownloadUrl,
+        uid: credential.user!.uid,
+      );
+      await FirebaseFirestore.instance.collection("users").doc(credential.user!.uid).set(user.toJson());
+      Get.snackbar(
+          "Account Created", "Account Created successfully"
+      );
+      showProgressBar = false;
+      Get.to(const LoginScreen());
+    }
+    catch(error){
+      Get.snackbar(
+          "Account Creation Unsuccessful", "Error Occurred while creating account"
+      );
+      showProgressBar = false;
+      Get.to(const LoginScreen());
+
+    }
+  }
+
+  Future<String> uploadImageToStorage(File imageFile) async{
+
+    Reference reference = FirebaseStorage.instance.ref().child("profile_images").child(FirebaseAuth.instance.currentUser!.uid);
+    UploadTask uploadTask = reference.putFile(imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    String downloadUrlOfUploadedImage = await taskSnapshot.ref.getDownloadURL();
+    return downloadUrlOfUploadedImage;
 
   }
 

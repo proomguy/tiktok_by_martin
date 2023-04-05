@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:tiktok_remake/authentication/login_screen.dart';
+import 'package:tiktok_remake/global_variables.dart';
 
 import '../widgets/input_text_widget.dart';
 import 'authentication_controller.dart';
@@ -20,7 +21,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController passwordTextEditingController = TextEditingController();
   TextEditingController userNameTextEditingController = TextEditingController();
 
-  bool showProgressBar = false;
 
   var authenticationController = AuthenticationController.instanceAuth;
 
@@ -132,7 +132,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           showProgressBar = true;
                         });
 
-                        //We will display the animation here and allow the user to log in
+                        if(authenticationController.profileImage != null
+                            && userNameTextEditingController.text.isNotEmpty
+                            && emailTextEditingController.text.isNotEmpty
+                            && passwordTextEditingController.text.isNotEmpty){
+                          setState(() {
+                            showProgressBar = true;
+                          });
+                          authenticationController.createAccountForNewUser(
+                            authenticationController.profileImage!,
+                            userNameTextEditingController.text.trim(),
+                            emailTextEditingController.text.trim(),
+                            passwordTextEditingController.text,
+                          );
+
+                        }
+
 
                       },
                       child: const Center(
