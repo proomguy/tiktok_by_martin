@@ -6,8 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_remake/authentication/login_screen.dart';
-import 'package:tiktok_remake/authentication/registration_screen.dart';
 import 'package:tiktok_remake/global_variables.dart';
+import 'package:tiktok_remake/home/home_screen.dart';
 import 'user.dart' as userModel;
 
 class AuthenticationController extends GetxController{
@@ -16,6 +16,7 @@ class AuthenticationController extends GetxController{
 
   late Rx<File?> _pickedFile;
   File? get profileImage => _pickedFile.value;
+  late Rx<User?> _currentUser;
 
   void chooseImageFromGallery() async {
 
@@ -68,7 +69,6 @@ class AuthenticationController extends GetxController{
           "Account Created", "Account Created successfully"
       );
       showProgressBar = false;
-      Get.to(const LoginScreen());
     }
     catch(error){
       Get.snackbar(
@@ -100,8 +100,6 @@ class AuthenticationController extends GetxController{
           "Logged in Successful", "You are now logged successfully"
       );
       showProgressBar = false;
-      //For purpose of testing the app, for now
-      Get.to(const RegistrationScreen());
     }
     catch(error){
       Get.snackbar(
@@ -112,6 +110,28 @@ class AuthenticationController extends GetxController{
 
     }
 
+  }
+
+  goToScreen(User? currentUser){
+
+    //Here we check to see if the user is logged in
+    //If the user is not logged in
+    if(currentUser == null){
+      Get.offAll(const LoginScreen());
+    }
+    //When the user is already logged in
+    else{
+      Get.offAll(const HomeScreen());
+    }
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
+    _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    ever(_currentUser, goToScreen);
   }
 
 }
