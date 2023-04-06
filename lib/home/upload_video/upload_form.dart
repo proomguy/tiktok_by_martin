@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:tiktok_remake/global_variables.dart';
+import 'package:tiktok_remake/home/upload_video/upload_controller.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../widgets/input_text_widget.dart';
@@ -25,6 +27,7 @@ class _UploadFormState extends State<UploadForm> {
   VideoPlayerController? playerController;
   TextEditingController artistSongTextEditingController = TextEditingController();
   TextEditingController descriptionTagsTextEditingController = TextEditingController();
+  UploadController uploadVideoController = Get.put(UploadController());
 
 
   @override
@@ -75,7 +78,7 @@ class _UploadFormState extends State<UploadForm> {
                   Colors.amber,
                   Colors.purpleAccent,
                 ],
-                animationDuration: 5,
+                animationDuration: 15,
                 backColor: Colors.white30,
               ),
             ) : Column(
@@ -117,6 +120,17 @@ class _UploadFormState extends State<UploadForm> {
                   child: InkWell(
                     onTap: (){
 
+                      if(artistSongTextEditingController.text.isNotEmpty && descriptionTagsTextEditingController.text.isNotEmpty){
+                        uploadVideoController.saveVideoInformationToFirestoreDatabase(
+                            artistSongTextEditingController.text,
+                            descriptionTagsTextEditingController.text,
+                            widget.videoPath,
+                            context
+                        );
+                        setState(() {
+                          showProgressBar = true;
+                        });
+                      }
                     },
                     child: const Center(
                       child: Text(
