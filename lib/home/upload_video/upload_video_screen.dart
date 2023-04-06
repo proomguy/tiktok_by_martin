@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tiktok_remake/home/upload_video/upload_form.dart';
 
 class UploadVideoScreen extends StatefulWidget {
   const UploadVideoScreen({Key? key}) : super(key: key);
@@ -18,7 +22,7 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
           children: [
             SimpleDialogOption(
               onPressed: (){
-
+                getVideoFile(ImageSource.gallery);
               },
               child: const Row(
                 children: [
@@ -46,7 +50,7 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
 
             SimpleDialogOption(
               onPressed: (){
-
+                getVideoFile(ImageSource.camera);
               },
               child: const Row(
                 children: [
@@ -100,6 +104,19 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
           ],
         ),
     );
+  }
+
+  getVideoFile(ImageSource sourceImage) async{
+    final videoFile = await ImagePicker().pickVideo(source: sourceImage);
+    if(videoFile != null){
+      //Video upload form
+      Get.to(
+          UploadForm(
+            videoFile: File(videoFile.path),
+            videoPath: videoFile.path
+          ),
+      );
+    }
   }
 
   @override
